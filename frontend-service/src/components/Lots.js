@@ -2,17 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Polygon, Tooltip } from 'react-leaflet';
 
-const Lots = ({ lots, zoomLevel, openModal, getLotColor }) => {
+const Lots = ({ lots, zoomLevel, openModal, getLotColor,user }) => {
   return (
     <>
-      {zoomLevel >= 18 && lots.map((lot) => (
-        lot.coordinates && lot.coordinates.coordinates && (
+          {zoomLevel >= 18 && lots.map((lot) => (
           <Polygon
             key={lot.id}
-            positions={Array.isArray(lot.coordinates.coordinates) && Array.isArray(lot.coordinates.coordinates[0]) ? lot.coordinates.coordinates[0].map(coord => [coord[1], coord[0]]) : []}
+            positions={Array.isArray(lot.coordinates) && Array.isArray(lot.coordinates[0]) ? lot.coordinates[0].map(coord => [coord[1], coord[0]]) : []}
             pathOptions={{ color: getLotColor(lot.status) }}
             eventHandlers={{
-              dblclick: () => openModal(lot),
+              dblclick: () => openModal(lot,user),
             }}
           >
             <Tooltip>
@@ -23,8 +22,7 @@ const Lots = ({ lots, zoomLevel, openModal, getLotColor }) => {
               </div>
             </Tooltip>
           </Polygon>
-        )
-      ))}
+        ))}
     </>
   );
 };
@@ -34,6 +32,7 @@ Lots.propTypes = {
   zoomLevel: PropTypes.number.isRequired,
   openModal: PropTypes.func.isRequired,
   getLotColor: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
 };
 
 export default Lots;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, Route, Routes, useLocation } from 'react-router-dom';
 import { Tabs, Tab, Box, Typography, Container } from '@mui/material';
 import UserTable from '../components/UserTable';
@@ -9,6 +9,10 @@ import LotTable from '../components/LotTable';
 const Dashboard = () => {
   const location = useLocation();
   const [value, setValue] = useState(location.pathname);
+
+  useEffect(() => {
+    setValue(location.pathname);
+  }, [location.pathname]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -27,7 +31,6 @@ const Dashboard = () => {
           textColor="primary"
           variant="scrollable"
           scrollButtons="auto"
-          centered
         >
           <Tab label="Administrar Usuarios" value="/dashboard/users" component={Link} to="/dashboard/users" />
           <Tab label="Administrar Proyectos" value="/dashboard/projects" component={Link} to="/dashboard/projects" />

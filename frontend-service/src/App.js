@@ -5,8 +5,6 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Header from './components/Header';
-import AdminUsers from './pages/AdminUsers';
-import MapServices from './pages/MapServices';
 import { getUserData } from './services/userServices';
 import AboutUs from './pages/AboutUs';
 import HowToBuy from './pages/HowToBuy';
@@ -51,8 +49,6 @@ const App = () => {
         <Route exact path="/" element={<Home user={user}/>} />
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/dashboard/*" element={<Dashboard />} />
-        <Route path="/admin-users" element={<AdminUsers />} />
-        <Route path="/map-services" element={<MapServices />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/howtobuy" element={<HowToBuy />} />
       </Routes>

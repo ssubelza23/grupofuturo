@@ -53,8 +53,8 @@ const Home = ({ user }) => {
   useEffect(() => {
     projectsApi.get('/')
       .then(response => {
-        
         setProjects(response.data);
+      
       })
       .catch(error => console.error('Error fetching projects:', error));
   }, []);
@@ -78,6 +78,7 @@ const Home = ({ user }) => {
       try {
         const response = await blocksApi.get('/');
         setBlocks(response.data);
+      
       } catch (error) {
         console.error('Error fetching blocks:', error);
       }
@@ -253,7 +254,7 @@ const Home = ({ user }) => {
           </Accordion>
           {showProjects && <Projects projects={projects} zoomLevel={zoomLevel} />}
           {showBlocks && <Blocks blocks={blocks} zoomLevel={zoomLevel} />}
-          {showLots && <Lots lots={lots} zoomLevel={zoomLevel} openModal={openModal} getLotColor={getLotColor} />}
+          {showLots && <Lots lots={lots} zoomLevel={zoomLevel} openModal={openModal} getLotColor={getLotColor} user={user}/>}
           {showStreets && <Streets streets={streets} zoomLevel={zoomLevel} />}
           {/* Punto estático */}
           <Marker
@@ -278,7 +279,7 @@ const Home = ({ user }) => {
 };
 
 Home.propTypes = {
-  user: PropTypes.shape({
+     user: PropTypes.shape({
     first_name: PropTypes.string.isRequired,
     last_name: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired, // Asegúrate de que el ID del usuario esté definido

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Box, Typography, Button, TextField, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import { lotsApi } from '../services/axiosConfig';
 
-const LotModalCliente = ({ open, lotId,  handleClose, onLotUpdated, user }) => {
+const LotModalCliente = ({ open, lotId, handleClose, onLotUpdated, user }) => {
   const [lotData, setLotData] = useState({
     name: '',
     price: '',
@@ -22,9 +22,17 @@ const LotModalCliente = ({ open, lotId,  handleClose, onLotUpdated, user }) => {
       // Fetch lot data when the modal opens
       lotsApi.get(`/${lotId}`)
         .then(response => {
-          setLotData(response.data);
-          setOriginalLotData(response.data);
-          if (isAuthenticated && (response.data.status === 'available' || (user.email === response.data.reserved_by && (response.data.status === 'reserved' || response.data.status === 'sold')))) {
+          const data = response.data;
+          setLotData({
+            name: data.name || '',
+            price: data.price || '',
+            surface: data.surface || '',
+            status: data.status || '',
+            reserved_by: data.reserved_by || '',
+            reserved_for: data.reserved_for || '',
+          });
+          setOriginalLotData(data);
+          if (isAuthenticated && user && (data.status === 'available' || (user.email === data.reserved_by && (data.status === 'reserved' || data.status === 'sold')))) {
             setCanEdit(true);
           } else {
             setCanEdit(false);
@@ -50,7 +58,7 @@ const LotModalCliente = ({ open, lotId,  handleClose, onLotUpdated, user }) => {
     }));
 
     // Asignar el seller_id del usuario autenticado si el estado cambia a "reservado" o "vendido"
-    if (name === 'status' && (value === 'reserved' || value === 'sold')) {
+    if (name === 'status' && (value === 'reserved' || value === 'sold') && user) {
       setLotData(prevState => ({
         ...prevState,
         reserved_by: user.email,
@@ -74,17 +82,9 @@ const LotModalCliente = ({ open, lotId,  handleClose, onLotUpdated, user }) => {
       return;
     }
 
-    // Crear un objeto con solo los campos modificados
-    const updatedFields = {};
-    for (const key in lotData) {
-      if (lotData[key] !== originalLotData[key]) {
-        updatedFields[key] = lotData[key];
-      }
-    }
-
-    console.log('Datos enviados lotmodal:', updatedFields); // Imprimir los datos antes de enviarlos
+    console.log('Datos enviados lotmodal:', lotData); // Imprimir los datos antes de enviarlos
     try {
-      const response = await lotsApi.put(`/${lotId}`, updatedFields);
+      const response = await lotsApi.put(`/${lotId}`, lotData);
       onLotUpdated(response.data);
       handleClose();
     } catch (error) {

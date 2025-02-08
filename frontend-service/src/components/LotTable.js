@@ -31,6 +31,7 @@ const LotTable = () => {
     try {
       const response = await lotsApi.get('/');
       setLots(response.data);
+      console.log('Lotes:', response.data);
     } catch (error) {
       console.error('Error al obtener los lotes:', error);
     }
@@ -98,6 +99,7 @@ const LotTable = () => {
               <TableRow key={lot.id}>
                 <TableCell>{lot.id}</TableCell>
                 <TableCell>{lot.name}</TableCell>
+                <TableCell>{lot.price}</TableCell>
                 <TableCell>{lot.status}</TableCell>
                 <TableCell>{lot.reserved_by}</TableCell>
                 <TableCell>{lot.reserved_for}</TableCell>
