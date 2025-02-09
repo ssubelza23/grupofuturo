@@ -1,14 +1,11 @@
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors'); // Importar el paquete cors
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const { createTables } = require('./models/User'); // Asegúrate de que la ruta sea correcta
-const pool = require('./config/database'); // Asegúrate de que esta ruta es correcta
+const cors = require('cors');
+const { createTables } = require('./models/usersModel');
+const userRoutes = require('./routes/usersRoutes');
 
 const app = express();
-
 const PORT = process.env.PORT || 3000;
 
 // Configurar CORS para aceptar conexiones desde localhost y tu dominio
@@ -29,9 +26,7 @@ app.use(cors({
 
 app.use(bodyParser.json());
 
-const userRoutes = require('./routes/UserRoutes'); // Importar las rutas de usuario
-
-app.use('/api/users', userRoutes); // Usar las rutas de usuario
+app.use('/api/users', userRoutes);
 
 // Ruta para la raíz
 app.get('/', (req, res) => {
@@ -41,8 +36,8 @@ app.get('/', (req, res) => {
 // Crear tablas y arrancar el servidor
 createTables().then(() => {
   app.listen(PORT, () => {
-    console.log(`Servidor escuchando en http://localhost:${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
   });
 }).catch(err => {
-  console.error('Error al crear las tablas:', err);
+  console.error('Error creating tables:', err);
 });
