@@ -12,3 +12,6 @@ CREATE TABLE IF NOT EXISTS users (
     dni VARCHAR(20) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+-- Insertar un usuario de ejemplo
+INSERT INTO users (username, first_name, last_name, email, password, phone, photo, user_type, dni)
+VALUES ('johndoe', 'John', 'Doe', 'johndoe@example.com', 'hashed_password', '123456', 'path/to/photo.jpg', 'comprador', '12345678');
