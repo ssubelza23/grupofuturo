@@ -10,14 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Setup SSH Key
-        run: |
-          echo "${{ secrets.DIGITALOCEAN_SSH_KEY }}" > key.pem
-          chmod 600 key.pem
-
-      - name: Test SSH Connection
-        run: ssh -i key.pem -o StrictHostKeyChecking=no root@${{ secrets.DIGITALOCEAN_HOST }} "echo 'SSH Success!'"
-    
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -60,7 +52,7 @@ jobs:
           username: ${{ secrets.DIGITALOCEAN_USERNAME }}
           key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
           script: |
-            cd /path/to/your/project
+            cd /root/grupofuturo
             export USER_DB_NAME=${{ secrets.USER_DB_NAME }}
             export USER_DB_USER=${{ secrets.USER_DB_USER }}
             export USER_DB_PASSWORD=${{ secrets.USER_DB_PASSWORD }}
