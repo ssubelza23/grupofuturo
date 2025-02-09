@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const { createTables } = require('./models/usersModel');
 const userRoutes = require('./routes/usersRoutes');
 
 const app = express();
@@ -33,11 +32,7 @@ app.get('/', (req, res) => {
   res.send('API is running');
 });
 
-// Crear tablas y arrancar el servidor
-createTables().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
-}).catch(err => {
-  console.error('Error creating tables:', err);
+// Arrancar el servidor
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
