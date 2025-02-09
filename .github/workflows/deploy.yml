@@ -10,6 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Setup SSH Key
+        run: |
+          echo "${{ secrets.DIGITALOCEAN_SSH_KEY }}" > key.pem
+          chmod 600 key.pem
+
+      - name: Test SSH Connection
+        run: ssh -i key.pem -o StrictHostKeyChecking=no root@${{ secrets.DIGITALOCEAN_HOST }} "echo 'SSH Success!'"
+    
       - name: Checkout code
         uses: actions/checkout@v2
 
