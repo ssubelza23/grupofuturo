@@ -32,28 +32,29 @@ jobs:
       run: |
         docker-compose -f docker-compose.yml build
         docker-compose -f docker-compose.yml push
+
+    # 🔹 Configuración de la clave SSH correctamente
     - name: Configure SSH Key
       run: |
         mkdir -p ~/.ssh
         echo "${{ secrets.DIGITALOCEAN_SSH_KEY }}" | tr -d '\r' > ~/.ssh/github-actions
         chmod 600 ~/.ssh/github-actions
+        ssh-keyscan -H ${{ secrets.DIGITALOCEAN_HOST }} >> ~/.ssh/known_hosts
+
+    # 🔹 Prueba de conexión SSH antes del deploy
     - name: Debug SSH Connection
       run: |
-        ssh -i ~/.ssh/github-actions -o StrictHostKeyChecking=no ${{ secrets.DIGITALOCEAN_USERNAME }}@${{ secrets.DIGITALOCEAN_HOST }} "echo 'SSH connection successful'"
-    - name: Start SSH agent and add key
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.DIGITALOCEAN_SSH_KEY }}" | tr -d '\r' > ~/.ssh/github-actions
-        chmod 600 ~/.ssh/github-actions
+        ssh -i ~/.ssh/github-actions ${{ secrets.DIGITALOCEAN_USERNAME }}@${{ secrets.DIGITALOCEAN_HOST }} "echo 'SSH connection successful'"
 
+    # 🔹 Deploy al servidor
     - name: Deploy to server
       env:
         SERVER_HOST: ${{ secrets.DIGITALOCEAN_HOST }}
         SERVER_USER: ${{ secrets.DIGITALOCEAN_USERNAME }}
       run: |
-        ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST << 'EOF'
+        ssh -i ~/.ssh/github-actions $SERVER_USER@$SERVER_HOST << 'EOF'
           cd /root/grupofuturo
           docker-compose pull
-          docker-compose up -d
+          docker-compose up -d --build
           docker system prune -f
         EOF
