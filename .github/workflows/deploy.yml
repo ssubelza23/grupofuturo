@@ -38,10 +38,8 @@ jobs:
     - name: Start SSH agent and add key
       run: |
         mkdir -p ~/.ssh
-        echo "${{ secrets.DIGITALOCEAN_SSH_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        eval $(ssh-agent -s)
-        ssh-add ~/.ssh/id_rsa
+        echo "${{ secrets.DIGITALOCEAN_SSH_KEY }}" | tr -d '\r' > ~/.ssh/github-actions
+        chmod 600 ~/.ssh/github-actions
 
     - name: Deploy to server
       env:
