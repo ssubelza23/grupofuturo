@@ -10,7 +10,7 @@ const streetsRoutes = require('./routes/streetsRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 
 const app = express();
-const port = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4000;
 
 // Configurar CORS para aceptar conexiones desde localhost y tu dominio
 const allowedOrigins = ['http://localhost:3001', 'http://www.grupofuturo.com.ar', 'http://grupofuturo.com.ar', 'https://grupofuturo.com.ar'];
@@ -50,8 +50,9 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something broke!');
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+// Arrancar el servidor
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
 
 module.exports = app;

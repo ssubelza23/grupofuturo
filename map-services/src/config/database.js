@@ -1,12 +1,12 @@
-const pgp = require('pg-promise')();
+const { Pool } = require('pg');
 require('dotenv').config();
 
-const db = pgp({
-  host: process.env.MAP_DB_HOST,
-  port: process.env.MAP_DB_PORT,
-  database: process.env.MAP_DB_NAME,
-  user: process.env.MAP_DB_USER,
-  password: process.env.MAP_DB_PASSWORD,
+const pool = new Pool({
+  user: process.env.POSTGRES_USER,
+  host: process.env.POSTGRES_HOST,
+  database: process.env.POSTGRES_DB,
+  password: process.env.POSTGRES_PASSWORD,
+  port: 5432,
 });
 
-module.exports = db;
+module.exports = pool;
