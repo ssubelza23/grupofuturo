@@ -1,7 +1,12 @@
 services:
   frontend:
-    image: ssubleza23/frontend:latest
-    restart: always
+    build:
+      context: ./frontend-service
+      dockerfile: Dockerfile
+    container_name: frontend
+    working_dir: /usr/src/app
+    volumes:
+      - ./frontend-service:/usr/src/app
     ports:
       - "3001:3001"
     networks:
