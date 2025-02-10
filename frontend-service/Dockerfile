@@ -1,32 +1,20 @@
-# Utiliza una imagen base de Node.js para construir la aplicación
-FROM node:20 AS build
+# Usa una imagen base de Node.js
+FROM node:20
 
-# Establece el directorio de trabajo
-WORKDIR /app
+# Establece el directorio de trabajo en el contenedor
+WORKDIR /usr/src/app
 
-# Copia los archivos de package.json y package-lock.json
+# Copia el archivo package.json y package-lock.json al directorio de trabajo
 COPY package*.json ./
 
-# Instala las dependencias
+# Instala las dependencias del proyecto
 RUN npm install
 
-# Copia el resto de los archivos de la aplicación
+# Copia el resto de los archivos de la aplicación al directorio de trabajo
 COPY . .
 
-# Construye la aplicación
-RUN npm run build
+# Expone el puerto en el que la aplicación se ejecutará
+EXPOSE 3001
 
-# Utiliza una imagen base de Nginx para servir la aplicación
-FROM nginx:alpine
-
-# Copia los archivos construidos desde la etapa anterior
-COPY --from=build /app/build /usr/share/nginx/html
-
-# Copia el archivo de configuración de Nginx
-COPY nginx.conf /etc/nginx/nginx.conf
-
-# Expone el puerto 80
-EXPOSE 80
-
-# Comando para iniciar Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Comando para ejecutar la aplicación
+CMD ["npm", "start"]

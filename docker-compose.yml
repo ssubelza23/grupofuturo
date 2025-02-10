@@ -1,13 +1,14 @@
-
+version: '3.8'
 
 services:
   frontend:
-    image: node:20
+    build:
+      context: ./frontend-service
+      dockerfile: Dockerfile
     container_name: frontend
     working_dir: /usr/src/app
     volumes:
       - ./frontend-service:/usr/src/app
-    command: npm start
     ports:
       - "3001:3001"
     networks:
