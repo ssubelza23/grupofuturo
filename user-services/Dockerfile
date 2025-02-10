@@ -13,20 +13,8 @@ RUN npm install
 # Copia el resto de los archivos de la aplicación al directorio de trabajo
 COPY . .
 
-# Construye la aplicación para producción
-RUN npm run build
+# Expone el puerto en el que la aplicación servirá
+EXPOSE 3000
 
-# Usa una imagen base de Nginx para servir la aplicación
-FROM nginx:latest
-
-# Copia los archivos construidos desde la etapa de construcción al directorio de Nginx
-COPY --from=build /usr/src/app/build /usr/share/nginx/html
-
-# Copia el archivo de configuración del servidor virtual de Nginx
-COPY default.conf /etc/nginx/conf.d/default.conf
-
-# Expone el puerto en el que Nginx servirá la aplicación
-EXPOSE 80
-
-# Comando para ejecutar Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Comando para ejecutar la aplicación
+CMD ["npm", "start"]

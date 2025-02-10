@@ -1,20 +1,20 @@
-# Usar una imagen base de Node.js
-FROM node:20
+# Usa una imagen base de Node.js para construir la aplicación
+FROM node:20 AS build
 
-# Establecer el directorio de trabajo
+# Establece el directorio de trabajo en el contenedor
 WORKDIR /usr/src/app
 
-# Copiar package.json y package-lock.json
+# Copia el archivo package.json y package-lock.json al directorio de trabajo
 COPY package*.json ./
 
-# Instalar las dependencias
+# Instala las dependencias del proyecto
 RUN npm install
 
-# Copiar el resto de la aplicación
+# Copia el resto de los archivos de la aplicación al directorio de trabajo
 COPY . .
 
-# Exponer el puerto en el que la aplicación se ejecutará
+# Expone el puerto en el que la aplicación servirá
 EXPOSE 4000
 
 # Comando para ejecutar la aplicación
-CMD ["node", "src/app.js"]
+CMD ["npm", "start"]
