@@ -1,5 +1,3 @@
-
-
 services:
   frontend:
     build:
@@ -23,6 +21,8 @@ services:
       - "3000:3000"
     networks:
       - app-network
+    env_file:
+      - .env  # <---- Carga el archivo .env automáticamente
 
   map-services:
     build:
@@ -31,6 +31,38 @@ services:
     container_name: map-services
     ports:
       - "4000:4000"
+    networks:
+      - app-network
+    env_file:
+      - .env  # <---- Carga el archivo .env automáticamente
+
+  db_user:
+    image: postgres:latest
+    container_name: db_user
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${USER_DB_USER}
+      POSTGRES_PASSWORD: ${USER_DB_PASSWORD}
+      POSTGRES_DB: ${USER_DB_NAME}
+    volumes:
+      - db_user_data:/var/lib/postgresql/data
+      - ./user-services/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+
+  db_map:
+    image: postgis/postgis:latest
+    container_name: db_map
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${MAP_DB_USER}
+      POSTGRES_PASSWORD: ${MAP_DB_PASSWORD}
+      POSTGRES_DB: ${MAP_DB_NAME}
+    volumes:
+      - db_map_data:/var/lib/postgresql/data
+      - ./map-services/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - app-network
 
@@ -63,3 +95,7 @@ services:
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  db_user_data:
+  db_map_data:
