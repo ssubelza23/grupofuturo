@@ -44,7 +44,7 @@ jobs:
     - name: Debug Secrets
       run: echo "${{ secrets.DIGITALOCEAN_SSH_KEY }}" | wc -l
 
-    # 🔹 Configuración de la clave SSH correctament
+    # 🔹 Configuración de la clave SSH
     - name: Configure SSH Key
       run: |
         mkdir -p ~/.ssh
