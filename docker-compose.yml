@@ -14,11 +14,11 @@ services:
     networks:
       - app-network
 
-  user-services:
+  user-service:
     build:
-      context: ./user-services
+      context: ./user-service
       dockerfile: Dockerfile
-    container_name: user-services
+    container_name: user-service
     ports:
       - "3000:3000"
     networks:
@@ -26,11 +26,11 @@ services:
     env_file:
       - .env
 
-  map-services:
+  map-service:
     build:
-      context: ./map-services
+      context: ./map-service
       dockerfile: Dockerfile
-    container_name: map-services
+    container_name: map-service
     ports:
       - "4000:4000"
     networks:
@@ -49,7 +49,7 @@ services:
       POSTGRES_DB: ${USER_DB_NAME}
     volumes:
       - db_user_data:/var/lib/postgresql/data
-      - ./user-services/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./user-service/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - app-network
 
@@ -64,12 +64,14 @@ services:
       POSTGRES_DB: ${MAP_DB_NAME}
     volumes:
       - db_map_data:/var/lib/postgresql/data
-      - ./map-services/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./map-service/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - app-network
 
   nginx:
-    image: nginx:latest
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
     container_name: nginx
     ports:
       - "80:80"
@@ -82,8 +84,8 @@ services:
       - app-network
     depends_on:
       - frontend
-      - user-services
-      - map-services
+      - user-service
+      - map-service
 
   certbot:
     image: certbot/certbot
