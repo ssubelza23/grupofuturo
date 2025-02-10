@@ -33,11 +33,12 @@ app.use(bodyParser.json());
 // Servir archivos estáticos desde el directorio 'uploads'
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
+// Rutas de la API
 app.use('/api/projects', projectsRoutes);
 app.use('/api/blocks', blocksRoutes);
 app.use('/api/lots', lotsRoutes);
 app.use('/api/streets', streetsRoutes);
-app.use('/api', uploadRoutes);
+app.use('/api/upload', uploadRoutes);  // Usar '/api/upload' para las solicitudes de carga
 
 // Ruta para la raíz
 app.get('/', (req, res) => {
