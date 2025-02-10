@@ -22,8 +22,8 @@ FROM nginx:latest
 # Copia los archivos construidos desde la etapa de construcción al directorio de Nginx
 COPY --from=build /usr/src/app/build /usr/share/nginx/html
 
-# Copia el archivo de configuración de Nginx
-COPY nginx.conf /etc/nginx/nginx.conf
+# Copia el archivo de configuración del servidor virtual de Nginx
+COPY default.conf /etc/nginx/conf.d/default.conf
 
 # Expone el puerto en el que Nginx servirá la aplicación
 EXPOSE 80
