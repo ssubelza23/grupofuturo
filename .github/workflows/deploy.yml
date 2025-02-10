@@ -32,6 +32,11 @@ jobs:
       run: |
         docker-compose -f docker-compose.yml build
         docker-compose -f docker-compose.yml push
+    - name: Configure SSH Key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.DIGITALOCEAN_SSH_KEY }}" | tr -d '\r' > ~/.ssh/github-actions
+        chmod 600 ~/.ssh/github-actions
     - name: Debug SSH Connection
       run: |
         ssh -i ~/.ssh/github-actions -o StrictHostKeyChecking=no ${{ secrets.DIGITALOCEAN_USERNAME }}@${{ secrets.DIGITALOCEAN_HOST }} "echo 'SSH connection successful'"
