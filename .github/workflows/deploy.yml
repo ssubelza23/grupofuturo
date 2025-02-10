@@ -27,11 +27,20 @@ jobs:
         sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
         sudo chmod +x /usr/local/bin/docker-compose
         docker-compose --version
-
+    - name: Intentar conexión SSH manualmente
+      run: |
+        ssh -vvv -i ~/.ssh/github-actions -o StrictHostKeyChecking=no ${{ secrets.DIGITALOCEAN_USERNAME }}@${{ secrets.DIGITALOCEAN_HOST }} "echo 'SSH connection successful'"
     - name: Build and push Docker images
       run: |
         docker-compose -f docker-compose.yml build
         docker-compose -f docker-compose.yml push
+    - name: Verificar si la clave SSH se escribe correctamente
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.DIGITALOCEAN_SSH_KEY }}" | tr -d '\r' > ~/.ssh/github-actions
+        chmod 600 ~/.ssh/github-actions
+        ls -la ~/.ssh
+        cat ~/.ssh/github-actions | wc -l
     - name: Debug Secrets
       run: echo "${{ secrets.DIGITALOCEAN_SSH_KEY }}" | wc -l
 
