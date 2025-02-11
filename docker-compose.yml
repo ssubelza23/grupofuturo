@@ -83,16 +83,16 @@ services:
       - user-services
       - map-services
 
-certbot:
-  image: certbot/certbot
-  container_name: certbot
-  volumes:
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
     - ./nginx/certbot/conf:/etc/letsencrypt
     - ./nginx/certbot/www:/var/www/certbot
-  networks:
+    networks:
     - app-network
-  entrypoint: ""
-  command: sleep infinity 
+    entrypoint: ""
+    command: sleep infinity 
 
 networks:
   app-network:
