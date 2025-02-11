@@ -3,7 +3,7 @@ import { Box, Typography, Container, Grid, Paper } from '@mui/material';
 
 const AboutUs = () => {
   return (
-    <Container>
+    <Container >
       <Box sx={{ my: 4 }}>
         <Typography variant="h2" component="h1" gutterBottom>
           Sobre Nosotros

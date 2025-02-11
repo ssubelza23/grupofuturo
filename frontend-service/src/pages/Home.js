@@ -54,7 +54,7 @@ const Home = ({ user }) => {
     projectsApi.get('/')
       .then(response => {
         setProjects(response.data);
-      
+      console.log(response.data);
       })
       .catch(error => console.error('Error fetching projects:', error));
   }, []);

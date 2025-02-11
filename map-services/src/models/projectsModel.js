@@ -4,14 +4,31 @@ const Project = {
   getAll: async () => {
     try {
       const result = await db.any(`
-        SELECT id, name, ST_AsGeoJSON(ST_Transform(coordinates, 4326)) as coordinates, photos, description
+        SELECT 
+          id, 
+          name, 
+          location, 
+          ST_AsGeoJSON(ST_Transform(coordinates, 4326)) as coordinates, 
+          photos, 
+          description
         FROM public.projects
       `);
+  
       return result.map(project => {
-        const coordinates = JSON.parse(project.coordinates);
+        let coordinates = null;
+  
+        try {
+          const geojson = JSON.parse(project.coordinates);
+          coordinates = geojson.type === "Point" 
+            ? [geojson.coordinates] 
+            : geojson.coordinates;
+        } catch (error) {
+          console.error("❌ Error parsing coordinates:", project.coordinates);
+        }
+  
         return {
           ...project,
-          coordinates: coordinates.coordinates
+          coordinates
         };
       });
     } catch (error) {
