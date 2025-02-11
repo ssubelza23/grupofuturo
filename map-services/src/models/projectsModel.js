@@ -2,40 +2,19 @@ const db = require('../config/database');
 
 const Project = {
   getAll: async () => {
-    try {
-      const result = await db.any(`
-        SELECT 
-          id, 
-          name, 
-          location, 
-          ST_AsGeoJSON(ST_Transform(coordinates, 4326)) as coordinates, 
-          photos, 
-          description
-        FROM public.projects
-      `);
-  
-      return result.map(project => {
-        let coordinates = null;
-  
-        try {
-          const geojson = JSON.parse(project.coordinates);
-          coordinates = geojson.type === "Point" 
-            ? [geojson.coordinates] 
-            : geojson.coordinates;
-        } catch (error) {
-          console.error("❌ Error parsing coordinates:", project.coordinates);
+    const result = await pool.query('SELECT id, name,location, ST_AsGeoJSON(coordinates) as coordinates, photos, description FROM public.projects');
+    return result.rows.map(project => {
+      const coordinates = JSON.parse(project.coordinates);
+      return {
+        ...project,
+        coordinates: {
+          lat: coordinates.coordinates[1],
+          lng: coordinates.coordinates[0]
         }
-  
-        return {
-          ...project,
-          coordinates
-        };
-      });
-    } catch (error) {
-      throw new Error('Error fetching projects: ' + error.message);
-    }
+      };
+    });
   },
-
+ 
   getById: async (id) => {
     try {
       const result = await db.oneOrNone('SELECT * FROM public.projects WHERE id = $1', [id]);
