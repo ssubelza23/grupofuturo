@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
-const userServicesBaseURL = process.env.REACT_APP_USER_SERVICES_API_URL || 'http://localhost:3000';
+const baseURL = process.env.REACT_APP_API_URL || 'https://www.grupofuturo.com.ar/api';
+const userServicesBaseURL = process.env.REACT_APP_USER_SERVICES_API_URL || 'https://www.grupofuturo.com.ar/api/users';
 
 export const projectsApi = axios.create({
   baseURL: `${baseURL}/api/projects`,
