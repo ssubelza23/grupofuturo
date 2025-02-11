@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 4000
 
 # Comando para ejecutar la aplicación
-CMD ["npm", "start"]
+CMD ["node", "src/app.js"]
