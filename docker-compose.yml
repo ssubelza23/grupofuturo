@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   frontend:
@@ -6,11 +5,9 @@ services:
       context: ./frontend-service
       dockerfile: Dockerfile
     container_name: frontend
-    working_dir: /usr/src/app
-    volumes:
-      - ./frontend-service:/usr/src/app
+    restart: always
     ports:
-      - "3001:3001"
+      - "3001:80"  # Para pruebas locales
     networks:
       - app-network
 
