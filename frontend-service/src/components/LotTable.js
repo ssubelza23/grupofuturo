@@ -90,6 +90,7 @@ const LotTable = () => {
               <TableCell>estado</TableCell>
               <TableCell>Reservado por</TableCell>
               <TableCell>Reservado para</TableCell>
+              <TableCell>Manzano</TableCell>
               <TableCell>Proyecto</TableCell>
               <TableCell>Acciones</TableCell>
             </TableRow>
@@ -103,6 +104,7 @@ const LotTable = () => {
                 <TableCell>{lot.status}</TableCell>
                 <TableCell>{lot.reserved_by}</TableCell>
                 <TableCell>{lot.reserved_for}</TableCell>
+                <TableCell>{lot.block_name}</TableCell>
                 <TableCell>{lot.project_name}</TableCell>
                 <TableCell>
                

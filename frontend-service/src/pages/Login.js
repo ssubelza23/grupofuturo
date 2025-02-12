@@ -24,7 +24,9 @@ const Login = () => {
     try {
       const response = await usersApi.post('/login', { email, password });
       const token = response.data.token;
+  
       localStorage.setItem('token', token); // Guardar el token en localStorage
+      console.log('Token******:', localStorage.getItem('token'));
       setOpenSuccess(true);
       setTimeout(() => {
         window.location.href = '/dashboard'; // Redirigir al dashboard

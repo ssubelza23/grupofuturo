@@ -1,28 +1,28 @@
 import axios from 'axios';
 
-const baseURL = process.env.REACT_APP_API_URL || 'https://www.grupofuturo.com.ar/api';
-const userServicesBaseURL = process.env.REACT_APP_USER_SERVICES_API_URL || 'https://www.grupofuturo.com.ar/api/users';
+const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+const userServicesBaseURL = process.env.REACT_APP_USER_SERVICES_API_URL || 'http://localhost:3000';
 
 export const projectsApi = axios.create({
-  baseURL: `${baseURL}/projects`,
+  baseURL: `${baseURL}/api/projects`,
 });
 
 export const lotsApi = axios.create({
-  baseURL: `${baseURL}/lots`,
+  baseURL: `${baseURL}/api/lots`,
 });
 
 export const blocksApi = axios.create({
-  baseURL: `${baseURL}/blocks`,
+  baseURL: `${baseURL}/api/blocks`,
 });
 
 export const streetsApi = axios.create({
-  baseURL: `${baseURL}/streets`,
+  baseURL: `${baseURL}/api/streets`,
 });
 
 const token = localStorage.getItem('token');
 
 export const usersApi = axios.create({
-  baseURL: `${userServicesBaseURL}`,
+  baseURL: `${userServicesBaseURL}/api/users`,
   headers: {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${token}`,
