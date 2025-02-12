@@ -31,5 +31,5 @@ export const usersApi = axios.create({
 
 // Configuración para acceder a las imágenes en la carpeta uploads
 export const uploadsApi = axios.create({
-  baseURL: `${baseURL}/uploads`,
+  baseURL: `/uploads`,
 });
