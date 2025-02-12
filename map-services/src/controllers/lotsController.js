@@ -72,22 +72,14 @@ const createLot = async (req, res) => {
 
 const updateLot = async (req, res) => {
   const { id } = req.params;
-  const { name, coordinates, status, surface, discount, initial_payment, number_of_installments, monto_financiado, cuota_mensual, price, reserved_until, reserved_by, reserved_for, description, block_id } = req.body;
+  const { name,price,reserved_by,reserved_for,status,surface } = req.body;
   try {
     const result = await pool.query(
-      'UPDATE public.lots SET name = $1, coordinates = ST_SetSRID(ST_GeomFromGeoJSON($2), 4326), status = $3, surface = $4, discount = $5, initial_payment = $6, number_of_installments = $7, monto_financiado = $8, cuota_mensual = $9, price = $10, reserved_until = $11, reserved_by = $12, reserved_for = $13, description = $14, block_id = $15 WHERE id = $16 RETURNING *',
-      [name, JSON.stringify({ type: 'Polygon', coordinates }), status, surface, discount, initial_payment, number_of_installments, monto_financiado, cuota_mensual, price, reserved_until, reserved_by, reserved_for, description, block_id, id]
+      'UPDATE public.lots SET name = $1, price = $2,reserved_by = $3, reserved_for = $4, status = $5, surface = $6 WHERE id = $7 RETURNING *',
+      [name,price,reserved_by,reserved_for,status,surface, id]
     );
     const lot = result.rows[0];
-    lot.coordinates = JSON.parse(lot.coordinates).coordinates; // Mantener las coordenadas en formato GeoJSON
-
     // Obtener el nombre del bloque y del proyecto
-    const blockResult = await pool.query('SELECT b.name as block_name, p.name as project_name FROM public.blocks b JOIN public.projects p ON b.project_id = p.id WHERE b.id = $1', [block_id]);
-    if (blockResult.rows.length > 0) {
-      lot.block_name = blockResult.rows[0].block_name;
-      lot.project_name = blockResult.rows[0].project_name;
-    }
-
     res.status(200).json(lot);
   } catch (error) {
     res.status(500).json({ error: 'Error updating lot: ' + error.message });

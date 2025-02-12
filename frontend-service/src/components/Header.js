@@ -22,7 +22,7 @@ const darkTheme = createTheme({
   },
 });
 
-const pages = ['inicio','Sobre Nosotros', 'Como Comprar', 'Contacto'];
+const pages = ['inicio','Sobre Nosotros', 'Como Comprar'];
 const settings = ['Dashboard', 'Logout'];
 
 function ResponsiveAppBar({ isAuthenticated, user, onLogout }) {
@@ -63,9 +63,6 @@ function ResponsiveAppBar({ isAuthenticated, user, onLogout }) {
       case 'Como Comprar':
         navigate('/howtobuy');
         break;
-      case 'Contacto':
-        navigate('/contact');
-        break;
       case 'Inicio':
         navigate('/');
         break; 
@@ -87,6 +84,10 @@ function ResponsiveAppBar({ isAuthenticated, user, onLogout }) {
     handleCloseUserMenu();
   };
 
+  const handleLogoClick = () => {
+    navigate('/');
+  };
+
   return (
     <ThemeProvider theme={darkTheme}>
       <AppBar position="fixed">
@@ -96,7 +97,7 @@ function ResponsiveAppBar({ isAuthenticated, user, onLogout }) {
               variant="h6"
               noWrap
               component="a"
-              href="/"
+              onClick={handleLogoClick} // Agregar el evento onClick
               sx={{
                 mr: 2,
                 display: { xs: 'none', md: 'flex' },
@@ -105,6 +106,7 @@ function ResponsiveAppBar({ isAuthenticated, user, onLogout }) {
                 letterSpacing: '.3rem',
                 color: 'inherit',
                 textDecoration: 'none',
+                cursor: 'pointer', // Cambiar el cursor a pointer
               }}
             >
               <img src={logo192} alt="logo" style={{ height: '40px' }} />
@@ -149,7 +151,7 @@ function ResponsiveAppBar({ isAuthenticated, user, onLogout }) {
               variant="h6"
               noWrap
               component="a"
-              href=""
+              onClick={handleLogoClick} // Agregar el evento onClick
               sx={{
                 mr: 2,
                 display: { xs: 'flex', md: 'none' },
@@ -159,6 +161,7 @@ function ResponsiveAppBar({ isAuthenticated, user, onLogout }) {
                 letterSpacing: '.3rem',
                 color: 'inherit',
                 textDecoration: 'none',
+                cursor: 'pointer', // Cambiar el cursor a pointer
               }}
             >
               <img src={logo192} alt="logo" style={{ height: '40px' }} />

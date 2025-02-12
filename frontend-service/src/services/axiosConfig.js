@@ -4,25 +4,25 @@ const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 const userServicesBaseURL = process.env.REACT_APP_USER_SERVICES_API_URL || 'http://localhost:3000';
 
 export const projectsApi = axios.create({
-  baseURL: `${baseURL}/api/projects`,
+  baseURL: `${baseURL}/projects`,
 });
 
 export const lotsApi = axios.create({
-  baseURL: `${baseURL}/api/lots`,
+  baseURL: `${baseURL}/lots`,
 });
 
 export const blocksApi = axios.create({
-  baseURL: `${baseURL}/api/blocks`,
+  baseURL: `${baseURL}/blocks`,
 });
 
 export const streetsApi = axios.create({
-  baseURL: `${baseURL}/api/streets`,
+  baseURL: `${baseURL}/streets`,
 });
 
 const token = localStorage.getItem('token');
 
 export const usersApi = axios.create({
-  baseURL: `${userServicesBaseURL}/api/users`,
+  baseURL: `${userServicesBaseURL}`,
   headers: {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${token}`,
