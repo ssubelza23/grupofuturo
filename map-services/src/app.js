@@ -22,7 +22,7 @@ app.use(cors(corsOptions));
 // Servir archivos estáticos desde el directorio 'uploads'
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
-// Rutas de la API
+// Rutas de la APIa
 app.use('/api/projects', projectsRoutes);
 app.use('/api/blocks', blocksRoutes);
 app.use('/api/lots', lotsRoutes);

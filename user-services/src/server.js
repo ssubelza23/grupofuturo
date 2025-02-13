@@ -11,14 +11,14 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-// Configurar CORS para aceptar conexiones desde localhost y tu dominio
-// Middleware
+// Configurar cors
 const corsOptions = {
-  origin: '*', // Permitir solicitudes desde cualquier origen
-  optionsSuccessStatus: 200 // Algunas versiones de navegadores antiguos (IE11, varios SmartTVs) no manejan bien el status 204
+  origin: ['http://localhost:3000', 'https://www.grupofuturo.com.ar'], // Permitir solo estos orígenes
+  credentials: true, // Permitir credenciales (cookies, autenticación)
+  optionsSuccessStatus: 200
 };
 
-app.use(cors(corsOptions)); // Usar el middleware cors con opciones
+app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
 
