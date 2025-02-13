@@ -47,7 +47,7 @@ const LotModalCliente = ({ open, lotId, handleClose, onLotUpdated, user }) => {
             reserved_for: data.reserved_for || '',
           });
           setOriginalLotData(data);
-          if (isAuthenticated && user && (data.status === 'available' || (user.email === data.reserved_by && (data.status === 'reserved' || data.status === 'sold')))) {
+          if (isAuthenticated && user && (data.status === 'available' || data.status === 'sold')) {
             setCanEdit(true);
           } else {
             setCanEdit(false);
@@ -76,7 +76,7 @@ const LotModalCliente = ({ open, lotId, handleClose, onLotUpdated, user }) => {
     if (name === 'status' && (value === 'reserved' || value === 'sold') && user) {
       setLotData(prevState => ({
         ...prevState,
-        reserved_by: user.email,
+        reserved_by: selectedUser ? `${selectedUser.first_name} ${selectedUser.last_name}` : '',
       }));
     }
 

@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(100),
     phone VARCHAR(20),
     photo TEXT,
-    user_type VARCHAR(20) CHECK (user_type IN ('comprador', 'vendedor')) NOT NULL,
-    dni VARCHAR(20) NOT NULL,
+    user_type VARCHAR(20) CHECK (user_type IN ('comprador', 'vendedor')),
+    dni VARCHAR(20),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 -- Insertar un usuario de ejemplo
