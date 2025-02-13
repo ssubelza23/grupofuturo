@@ -5,7 +5,7 @@ import { Polygon, Tooltip } from 'react-leaflet';
 const Lots = ({ lots, zoomLevel, openModal, getLotColor,user }) => {
   return (
     <>
-          {zoomLevel >= 18 && lots.map((lot) => (
+          {zoomLevel >= 17 && lots.map((lot) => (
           <Polygon
             key={lot.id}
             positions={Array.isArray(lot.coordinates) && Array.isArray(lot.coordinates[0]) ? lot.coordinates[0].map(coord => [coord[1], coord[0]]) : []}

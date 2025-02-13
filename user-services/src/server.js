@@ -12,31 +12,26 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Configurar CORS para aceptar conexiones desde localhost y tu dominio
-const allowedOrigins = ['http://localhost:3001', 'http://www.grupofuturo.com.ar', 'http://grupofuturo.com.ar', 'https://grupofuturo.com.ar'];
-app.use(cors({
+const allowedOrigins = [
+  "http://localhost:3001",
+  "https://www.grupofuturo.com.ar",
+  "http://www.grupofuturo.com.ar"
+];
+
+const corsOptions = {
   origin: function (origin, callback) {
-    // Permitir solicitudes sin origen (como las de Postman)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = 'La política CORS no permite el acceso desde este origen.';
-      return callback(new Error(msg), false);
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error("CORS policy does not allow this origin."), false);
     }
-    return callback(null, true);
   },
-  methods: 'GET,POST,PUT,DELETE,OPTIONS',
-  allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,Authorization'
-}));
+  credentials: true, // Importante para autenticación con cookies/tokens
+  methods: "GET,POST,PUT,DELETE,OPTIONS",
+  allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+};
 
-app.use(bodyParser.json());
-
-const userRoutes = require('./routes/userRoutes'); // Importar las rutas de usuario
-
-app.use('/api/users', userRoutes); // Usar las rutas de usuario
-
-// Ruta para la raíz
-app.get('/', (req, res) => {
-  res.send('API is running');
-});
+app.use(cors(corsOptions));
 
 // Crear tablas y arrancar el servidor
 createTables().then(() => {
