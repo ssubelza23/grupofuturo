@@ -18,19 +18,27 @@ const authenticate = (req, res, next) => {
   }
 };
 
+
 // Ruta para registrar un usuario
 router.post('/register', async (req, res) => {
   try {
     const { username, first_name, last_name, email, password, phone, photo, user_type, dni } = req.body;
 
-    // Verificar si el correo electrónico ya existe
-    const emailCheckQuery = 'SELECT * FROM users WHERE email = $1';
-    const { rows: emailRows } = await pool.query(emailCheckQuery, [email]);
-    if (emailRows.length > 0) {
-      return res.status(400).send({ message: 'El correo electrónico ya está en uso.' });
+    // Verificar si el correo electrónico ya existe si no es nulo o vacío
+    if (email && email.trim() !== '') {
+      const emailCheckQuery = 'SELECT * FROM users WHERE email = $1';
+      const { rows: emailRows } = await pool.query(emailCheckQuery, [email]);
+      if (emailRows.length > 0) {
+        return res.status(400).send({ message: 'El correo electrónico ya está en uso.' });
+      }
     }
 
-    const hashedPassword = await bcrypt.hash(password, 8);
+    // Hacer hash de la contraseña si no es nula o vacía
+    let hashedPassword = null;
+    if (password && password.trim() !== '') {
+      hashedPassword = await bcrypt.hash(password, 8);
+    }
+
     const query = `
       INSERT INTO users (username, first_name, last_name, email, password, phone, photo, user_type, dni)
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)

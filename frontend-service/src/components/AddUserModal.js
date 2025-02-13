@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Box, Typography, TextField, Button } from '@mui/material';
+import { Modal, Box, Typography, TextField, Button,FormControl,InputLabel,Select, MenuItem} from '@mui/material';
 import { usersApi } from '../services/axiosConfig';
 
 const AddUserModal = ({ open, handleClose, fetchUsers }) => {
@@ -12,11 +12,13 @@ const AddUserModal = ({ open, handleClose, fetchUsers }) => {
   const handleAddUser = async () => {
     try {
       await usersApi.post('/', {
+        user_name: `${firstName} ${lastName}`,
         first_name: firstName,
         last_name: lastName,
         email: email,
         user_type: userType,
       });
+      console.log('Usuario agregado correctamente');
       fetchUsers(); // Refrescar la lista de usuarios
       handleClose(); // Cerrar el modal
     } catch (error) {
@@ -64,14 +66,18 @@ const AddUserModal = ({ open, handleClose, fetchUsers }) => {
           onChange={(e) => setEmail(e.target.value)}
           sx={{ mb: 2 }}
         />
-        <TextField
-          label="Rol"
-          variant="outlined"
-          fullWidth
-          value={userType}
-          onChange={(e) => setUserType(e.target.value)}
-          sx={{ mb: 2 }}
-        />
+         <FormControl fullWidth sx={{ mb: 2 }}>
+          <InputLabel id="user-type-label">Rol</InputLabel>
+          <Select
+            labelId="user-type-label"
+            value={userType}
+            onChange={(e) => setUserType(e.target.value)}
+            label="Rol"
+          >
+            <MenuItem value="vendedor">Vendedor</MenuItem>
+            <MenuItem value="comprador">Comprador</MenuItem>
+          </Select>
+        </FormControl>
         <Button variant="contained" color="primary" onClick={handleAddUser}>
           Agregar
         </Button>

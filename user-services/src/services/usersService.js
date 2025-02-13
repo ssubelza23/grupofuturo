@@ -26,21 +26,14 @@ const getUserById = async (id) => {
 
 const createUser = async (userData) => {
   try {
-    // Convertir password y email a null si están vacíos
-    const password = userData.password && userData.password.trim() !== '' ? userData.password : null;
-    const email = userData.email && userData.email.trim() !== '' ? userData.email : null;
-
-    let hashedPassword = null;
-    if (password) {
-      hashedPassword = await bcrypt.hash(password, 8);
-    }
-
-    const newUser = await User.create({ ...userData, password: hashedPassword, email });
+    const hashedPassword = await bcrypt.hash(userData.password, 8);
+    const newUser = await User.create({ ...userData, password: hashedPassword });
     return newUser;
   } catch (error) {
     throw new Error(error.message);
   }
 };
+
 const updateUser = async (id, userData) => {
   try {
     if (userData.password) {
