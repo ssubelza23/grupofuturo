@@ -8,7 +8,7 @@ const Blocks = ({ blocks, zoomLevel }) => {
   
   return (
     <>
-        {zoomLevel < 18 && blocks.map((block) => (
+        {zoomLevel < 17 && blocks.map((block) => (
           <Polygon
             key={block.id}
             positions={block.coordinates[0].map(coord => [coord[1], coord[0]])}
