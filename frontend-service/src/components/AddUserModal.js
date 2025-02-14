@@ -7,25 +7,36 @@ const AddUserModal = ({ open, handleClose, fetchUsers }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  const [userType, setUserType] = useState('');
+ const [userType, setUserType] = useState('vendedor'); // Inicializar con "vendedor"
 
-  const handleAddUser = async () => {
-    try {
-      await usersApi.post('/', {
-        user_name: `${firstName} ${lastName}`,
-        first_name: firstName,
-        last_name: lastName,
-        email: email,
-        user_type: userType,
-      });
-      console.log('Usuario agregado correctamente');
-      fetchUsers(); // Refrescar la lista de usuarios
-      handleClose(); // Cerrar el modal
-    } catch (error) {
-      console.error('Error al agregar el usuario:', error);
-    }
-  };
+const handleAddUser = async () => {
+  try {
+    // 🔹 Verificar los datos antes de enviarlos
+    console.log("Datos enviados a /register:", {
+      username: `${firstName} ${lastName}`,
+      first_name: firstName,
+      last_name: lastName,
+      email: email,
+      user_type: userType,
+    });
 
+    await usersApi.post('/register', {
+      username: `${firstName} ${lastName}`,
+      first_name: firstName,
+      last_name: lastName,
+      email: email,
+      user_type: userType,
+    }, {
+      headers: { "Content-Type": "application/json" }
+    });
+
+    console.log('Usuario agregado correctamente');
+    fetchUsers();
+    handleClose();
+  } catch (error) {
+    console.error('Error al agregar el usuario:', error.response?.data || error);
+  }
+};
   return (
     <Modal open={open} onClose={handleClose}>
       <Box sx={{

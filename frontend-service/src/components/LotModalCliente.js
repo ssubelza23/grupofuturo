@@ -1,23 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Box, Typography, Button, TextField, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import { lotsApi } from '../services/axiosConfig';
-import { usersApi } from '../services/axiosConfig';
-import { Autocomplete } from '@mui/material';
-const LotModalCliente = ({ open, lotId, handleClose, onLotUpdated, user }) => {
-  const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await usersApi.get('/');
-        setUsers(response.data);
-      } catch (error) {
-        console.error('Error fetching users:', error);
-      }
-    };
 
-    fetchUsers();
-  }, []);
+const LotModalCliente = ({ open, lotId, handleClose, onLotUpdated, user }) => {
   const [lotData, setLotData] = useState({
     name: '',
     price: '',
@@ -26,7 +11,7 @@ const LotModalCliente = ({ open, lotId, handleClose, onLotUpdated, user }) => {
     reserved_by: '',
     reserved_for: '',
   });
-  const [setOriginalLotData] = useState({});
+  const [originalLotData, setOriginalLotData] = useState({});
   const [canEdit, setCanEdit] = useState(false); // Estado para controlar si el usuario puede modificar el lote
   const isAuthenticated = !!localStorage.getItem('token'); // Verificar si el usuario está autenticado
   const token = localStorage.getItem('token'); // Obtener el token de autenticación
@@ -47,7 +32,7 @@ const LotModalCliente = ({ open, lotId, handleClose, onLotUpdated, user }) => {
             reserved_for: data.reserved_for || '',
           });
           setOriginalLotData(data);
-          if (isAuthenticated && user && (data.status === 'available' || data.status === 'sold')) {
+          if (isAuthenticated && user && (data.status === 'available' || (user.email === data.reserved_by && (data.status === 'reserved' || data.status === 'sold')))) {
             setCanEdit(true);
           } else {
             setCanEdit(false);
@@ -76,7 +61,7 @@ const LotModalCliente = ({ open, lotId, handleClose, onLotUpdated, user }) => {
     if (name === 'status' && (value === 'reserved' || value === 'sold') && user) {
       setLotData(prevState => ({
         ...prevState,
-        reserved_by: selectedUser ? `${selectedUser.first_name} ${selectedUser.last_name}` : '',
+        reserved_by: user.email,
       }));
     }
 
@@ -106,10 +91,6 @@ const LotModalCliente = ({ open, lotId, handleClose, onLotUpdated, user }) => {
       console.error('Error updating lot modal:', error);
       alert('Error updating lot');
     }
-  };
-  // Función para manejar el cambio de usuario seleccionado
-  const handleUserChange = (event, value) => {
-    setSelectedUser(value);
   };
 
   return (
@@ -184,19 +165,6 @@ const LotModalCliente = ({ open, lotId, handleClose, onLotUpdated, user }) => {
             <MenuItem value="reserved">Reservado</MenuItem>
           </Select>
         </FormControl>
-        <Box>
-        <Typography variant="h6" component="h2">
-          Vendedor
-        </Typography>
-        <Autocomplete
-          name="reserved_by"
-          options={users}
-          getOptionLabel={(option) => `${option.first_name} ${option.last_name}`}
-          value={selectedUser}
-          onChange={handleUserChange}
-          renderInput={(params) => <TextField {...params} label="Vendedor" variant="outlined" />}
-        />
-      </Box>
         <TextField
           label="Reservado para"
           name="reserved_for"

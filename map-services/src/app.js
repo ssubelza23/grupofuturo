@@ -13,16 +13,19 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 const corsOptions = {
-  origin: ['http://localhost:3000', 'https://www.grupofuturo.com.ar'], // Permitir solo estos orígenes
+  origin: ['http://localhost:3001', 'https://www.grupofuturo.com.ar'], // Permitir solo estos orígenes
   credentials: true, // Permitir credenciales (cookies, autenticación)
   optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
+
+
+
 // Servir archivos estáticos desde el directorio 'uploads'
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
-// Rutas de la APIa
+// Rutas de la API
 app.use('/api/projects', projectsRoutes);
 app.use('/api/blocks', blocksRoutes);
 app.use('/api/lots', lotsRoutes);

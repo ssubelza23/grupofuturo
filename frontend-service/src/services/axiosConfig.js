@@ -33,3 +33,11 @@ export const usersApi = axios.create({
 export const uploadsApi = axios.create({
   baseURL: `/uploads`,
 });
+
+// Configuración para la ruta de registro de usuario (sin token)
+export const registerApi = axios.create({
+  baseURL: `${userServicesBaseURL}/register`,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
