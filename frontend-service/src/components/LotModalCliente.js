@@ -1,8 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Box, Typography, Button, TextField, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import { lotsApi } from '../services/axiosConfig';
+import { usersApi } from '../services/axiosConfig';
+import { Autocomplete } from '@mui/material';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 
 const LotModalCliente = ({ open, lotId, handleClose, onLotUpdated, user }) => {
+  const createWhatsAppLink = (lot) => {
+    const message = `Hola, estoy interesado en el Lote N°${lot.name}.\nSuperficie: ${lot.surface} m²\nPrecio: $${lot.price} dólares. Proyecto ${lot.project_name} ${lot.block_name}.`;
+    return `https://wa.me/+5492215693951?text=${encodeURIComponent(message)}`;
+  };
+
+  const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await usersApi.get('/');
+        setUsers(response.data);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
   const [lotData, setLotData] = useState({
     name: '',
     price: '',
@@ -10,8 +34,11 @@ const LotModalCliente = ({ open, lotId, handleClose, onLotUpdated, user }) => {
     status: '',
     reserved_by: '',
     reserved_for: '',
+    project_name: '',
+    block_name: '',
   });
-  const [originalLotData, setOriginalLotData] = useState({});
+
+  const [setOriginalLotData] = useState({});
   const [canEdit, setCanEdit] = useState(false); // Estado para controlar si el usuario puede modificar el lote
   const isAuthenticated = !!localStorage.getItem('token'); // Verificar si el usuario está autenticado
   const token = localStorage.getItem('token'); // Obtener el token de autenticación
@@ -30,9 +57,11 @@ const LotModalCliente = ({ open, lotId, handleClose, onLotUpdated, user }) => {
             status: data.status || '',
             reserved_by: data.reserved_by || '',
             reserved_for: data.reserved_for || '',
+            project_name: data.project_name || '',
+            block_name: data.block_name || '',
           });
           setOriginalLotData(data);
-          if (isAuthenticated && user && (data.status === 'available' || (user.email === data.reserved_by && (data.status === 'reserved' || data.status === 'sold')))) {
+          if (isAuthenticated) {
             setCanEdit(true);
           } else {
             setCanEdit(false);
@@ -58,10 +87,10 @@ const LotModalCliente = ({ open, lotId, handleClose, onLotUpdated, user }) => {
     }));
 
     // Asignar el seller_id del usuario autenticado si el estado cambia a "reservado" o "vendido"
-    if (name === 'status' && (value === 'reserved' || value === 'sold') && user) {
+    if (name === 'status' && (value === 'reserved' || value === 'sold')) {
       setLotData(prevState => ({
         ...prevState,
-        reserved_by: user.email,
+        reserved_by: selectedUser ? `${selectedUser.first_name} ${selectedUser.last_name}` : '',
       }));
     }
 
@@ -93,6 +122,11 @@ const LotModalCliente = ({ open, lotId, handleClose, onLotUpdated, user }) => {
     }
   };
 
+  // Función para manejar el cambio de usuario seleccionado
+  const handleUserChange = (event, value) => {
+    setSelectedUser(value);
+  };
+
   return (
     <Modal
       open={open}
@@ -115,8 +149,18 @@ const LotModalCliente = ({ open, lotId, handleClose, onLotUpdated, user }) => {
         p: 4,
       }}>
         <Typography id="modal-title" variant="h6" component="h2">
-          {isAuthenticated ? 'Modificar Lote' : 'Información del Lote'}
+         Información del Lote
         </Typography>
+        <a href={createWhatsAppLink(lotData)} target="_blank" rel="noopener noreferrer">
+          <Button
+            variant="contained"
+            color="success"
+            startIcon={<WhatsAppIcon />}
+            sx={{ mt: 2, mb: 2 }}
+          >
+            Enviar a WhatsApp
+          </Button>
+        </a>
         <TextField
           label="Nombre"
           name="name"
@@ -159,12 +203,33 @@ const LotModalCliente = ({ open, lotId, handleClose, onLotUpdated, user }) => {
             label="Estado"
             onChange={handleChange}
             disabled={!canEdit}
+            sx={{
+              backgroundColor: lotData.status === 'available' ? 'lightgreen' :
+                               lotData.status === 'sold' ? 'lightcoral' :
+                               lotData.status === 'reserved' ? 'orange' : 'white',
+            }}
           >
             <MenuItem value="available">Disponible</MenuItem>
             <MenuItem value="sold">Vendido</MenuItem>
             <MenuItem value="reserved">Reservado</MenuItem>
           </Select>
         </FormControl>
+        {isAuthenticated && (
+        <Box>
+          <Typography variant="h6" component="h2">
+            Vendedor
+          </Typography>
+          <Autocomplete
+            name="reserved_by"
+            options={users}
+            getOptionLabel={(option) => `${option.first_name} ${option.last_name}`}
+            value={selectedUser}
+            onChange={handleUserChange}
+            renderInput={(params) => <TextField {...params} label="Vendedor" variant="outlined" />}
+          />
+        </Box>
+        )}
+        {isAuthenticated && (
         <TextField
           label="Reservado para"
           name="reserved_for"
@@ -175,8 +240,8 @@ const LotModalCliente = ({ open, lotId, handleClose, onLotUpdated, user }) => {
           InputProps={{
             readOnly: !canEdit,
           }}
-        />
-        {canEdit && (
+        /> )}
+        {isAuthenticated && (
           <Button onClick={handleUpdate} sx={{ mt: 2 }} variant="contained" color="primary">
             Actualizar Lote
           </Button>

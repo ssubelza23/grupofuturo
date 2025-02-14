@@ -20,7 +20,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-
+app.use(bodyParser.json());
 
 // Servir archivos estáticos desde el directorio 'uploads'
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
