@@ -13,7 +13,7 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 const corsOptions = {
-  origin: ['http://localhost:3001', 'https://www.grupofuturo.com.ar'], // Permitir solo estos orígenes
+  origin: ['http://localhost:3000', 'https://www.grupofuturo.com.ar'], // Permitir solo estos orígenes
   credentials: true, // Permitir credenciales (cookies, autenticación)
   optionsSuccessStatus: 200
 };
