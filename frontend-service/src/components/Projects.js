@@ -8,14 +8,14 @@ const Projects = ({ projects, zoomLevel }) => {
   return (
     <>
       {projects.map((project) => {
-        if (zoomLevel < 18 && project.coordinates && project.coordinates.length > 0) {
+        if (zoomLevel < 16 && project.coordinates && project.coordinates.length > 0) {
           const positions = project.coordinates[0].map(coord => [coord[1], coord[0]]);
           const bounds = L.latLngBounds(positions);
 
           const icon = L.icon({
             iconUrl: `${uploadsApi.defaults.baseURL}/${project.photos[0]}`,
             iconSize: [100, 100], // Ajusta el tamaño del icono según sea necesario
-            iconAnchor: [25, 50], // Ajusta el punto de anclaje del icono
+            iconAnchor: [0, 0], // Ajusta el punto de anclaje del icono
             popupAnchor: [0, -50], // Ajusta el punto de anclaje del popup
           });
 
@@ -24,18 +24,12 @@ const Projects = ({ projects, zoomLevel }) => {
               <Polygon
                 positions={positions}
                 pathOptions={{
-                  color: 'blue',
-                  fillColor: 'blue',
+                  color: 'green',
+                  fillColor: 'green',
                   fillOpacity: 0.5,
                 }}
               />
               <Marker position={bounds.getCenter()} icon={icon}>
-                <Tooltip>
-                  <div>
-                    <strong>{project.name}</strong><br />
-                    <img src={`${uploadsApi.defaults.baseURL}/${project.photos[0]}`} alt={project.name} style={{ width: '100px', height: 'auto' }} />
-                  </div>
-                </Tooltip>
               </Marker>
             </React.Fragment>
           );

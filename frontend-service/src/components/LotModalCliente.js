@@ -38,7 +38,6 @@ const LotModalCliente = ({ open, lotId, handleClose, onLotUpdated, user }) => {
     block_name: '',
   });
 
-  const [setOriginalLotData] = useState({});
   const [canEdit, setCanEdit] = useState(false); // Estado para controlar si el usuario puede modificar el lote
   const isAuthenticated = !!localStorage.getItem('token'); // Verificar si el usuario está autenticado
   const token = localStorage.getItem('token'); // Obtener el token de autenticación
@@ -58,9 +57,9 @@ const LotModalCliente = ({ open, lotId, handleClose, onLotUpdated, user }) => {
             reserved_by: data.reserved_by || '',
             reserved_for: data.reserved_for || '',
             project_name: data.project_name || '',
-            block_name: data.block_name || '',
+            block_name: data.block_name || ''
           });
-          setOriginalLotData(data);
+          
           if (isAuthenticated) {
             setCanEdit(true);
           } else {
@@ -202,7 +201,7 @@ const LotModalCliente = ({ open, lotId, handleClose, onLotUpdated, user }) => {
             value={lotData.status}
             label="Estado"
             onChange={handleChange}
-            disabled={!canEdit}
+           
             sx={{
               backgroundColor: lotData.status === 'available' ? 'lightgreen' :
                                lotData.status === 'sold' ? 'lightcoral' :
@@ -237,9 +236,6 @@ const LotModalCliente = ({ open, lotId, handleClose, onLotUpdated, user }) => {
           onChange={handleChange}
           fullWidth
           sx={{ mt: 2 }}
-          InputProps={{
-            readOnly: !canEdit,
-          }}
         /> )}
         {isAuthenticated && (
           <Button onClick={handleUpdate} sx={{ mt: 2 }} variant="contained" color="primary">
