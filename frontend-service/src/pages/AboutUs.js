@@ -3,7 +3,7 @@ import { Box, Typography, Container, Grid, Paper } from '@mui/material';
 
 const AboutUs = () => {
   return (
-    <Container >
+    <Container sx={{ mt: 8 }}> {/* Agregar margen superior */}
       <Box sx={{ my: 4 }}>
         <Typography variant="h2" component="h1" gutterBottom>
           Sobre Nosotros
@@ -15,10 +15,10 @@ const AboutUs = () => {
           En Grupo Futuro, nos dedicamos a ofrecer las mejores soluciones inmobiliarias para nuestros clientes. Con años de experiencia en el mercado, nos enorgullece brindar un servicio personalizado y de alta calidad.
         </Typography>
         <Typography variant="body1" paragraph>
-          Nuestro equipo está compuesto por profesionales altamente capacitados y comprometidos con la satisfacción de nuestros clientes. Nos esforzamos por entender las necesidades de cada cliente y ofrecer soluciones que se adapten a sus expectativas.
+          Nuestro equipo está comprometido con la satisfacción de nuestros clientes. Nos esforzamos por entender las necesidades de cada cliente y ofrecer soluciones que se adapten a sus expectativas.
         </Typography>
         <Typography variant="body1" paragraph>
-          Ya sea que estés buscando comprar, vender o alquilar una propiedad, en Grupo Futuro estamos aquí para ayudarte en cada paso del camino.
+          Ya sea que estés buscando comprar un terreno, una hectarea, en Grupo Futuro estamos aquí para ayudarte en cada paso del camino.
         </Typography>
       </Box>
       <Grid container spacing={4}>
@@ -38,7 +38,7 @@ const AboutUs = () => {
               Visión
             </Typography>
             <Typography variant="body1">
-              Ser la empresa líder en el mercado inmobiliario, reconocida por nuestra integridad, profesionalismo y compromiso con la satisfacción del cliente.
+              Ser la empresa líder en el mercado inmobiliario, reconocida por nuestra integridad y compromiso con la satisfacción del cliente.
             </Typography>
           </Paper>
         </Grid>

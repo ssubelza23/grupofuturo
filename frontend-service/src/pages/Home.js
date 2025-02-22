@@ -12,7 +12,7 @@ import Projects from '../components/Projects';
 import Lots from '../components/Lots';
 import Streets from '../components/Streets';
 import Hero from '../components/Hero';
-
+import Benefits from '../components/Benefits';
 
 const redIcon = new L.Icon({
   iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
@@ -135,8 +135,11 @@ const Home = ({ user }) => {
   return (
     <div className="home-container">
       
-      <Box sx={{ height: '40vh' }}>
+      <Box sx={{ mt: 2, mb: 2 }}>
         <Hero projects={projects} />
+      </Box>
+      <Box sx={{ mt: 2, mb: 2 }}>
+        <Benefits />
       </Box>
       <Box sx={{ height: '100vh' }}>
       <Box
@@ -145,11 +148,14 @@ const Home = ({ user }) => {
           padding: '10px',
           borderRadius: '5px',
           textAlign: 'center',
-          
+          position: 'sticky', // Hacer que el elemento sea pegajoso
+          top: 60, // Posición desde la parte superior de la pantalla
+          zIndex: 1000, // Asegurar que el elemento esté por encima de otros elementos
         }}
       >
         <Typography
           variant="h5"
+         
           component="h2"
           gutterBottom
           sx={{
@@ -160,6 +166,7 @@ const Home = ({ user }) => {
             },
             textShadow: '4px 4px 8px rgba(0, 0, 0, 1)', // Sombra más pronunciada
             color: '#FFFFFF', // Color blanco
+            
           }}
         >
           Ubicaciones de proyectos y lotes disponibles

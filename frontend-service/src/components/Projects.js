@@ -8,10 +8,10 @@ const Projects = ({ projects, zoomLevel }) => {
   return (
     <>
       {projects.map((project) => {
-        if (zoomLevel < 16 && project.coordinates && project.coordinates.length > 0) {
+        if (zoomLevel <= 16 && project.coordinates && project.coordinates.length > 0) {
           const positions = project.coordinates[0].map(coord => [coord[1], coord[0]]);
           const bounds = L.latLngBounds(positions);
-
+          
           const icon = L.icon({
             iconUrl: `${uploadsApi.defaults.baseURL}/${project.photos[0]}`,
             iconSize: [100, 100], // Ajusta el tamaño del icono según sea necesario

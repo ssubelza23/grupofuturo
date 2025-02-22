@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
+import { GlobalProvider } from './context/GlobalState';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -8,7 +8,8 @@ import Header from './components/Header';
 import { getUserData } from './services/userServices';
 import AboutUs from './pages/AboutUs';
 import HowToBuy from './pages/HowToBuy';
-
+import Proyects from './pages/Projects';
+import ProjectDetail from "./pages/ProjectDetail";
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
@@ -43,6 +44,7 @@ const App = () => {
   };
 
   return (
+    <GlobalProvider>
     <Router>
       <Header isAuthenticated={isAuthenticated} user={user} onLogout={handleLogout} onLogin={handleLogin} />
       <Routes>
@@ -51,8 +53,11 @@ const App = () => {
         <Route path="/dashboard/*" element={<Dashboard />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/howtobuy" element={<HowToBuy />} />
+        <Route path="/projects" element={<Proyects user={user}/>} />
+        <Route path="/projects/:projectId" element={<ProjectDetail user={user}/>} />
       </Routes>
     </Router>
+    </GlobalProvider>
   );
 };
 

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Box, Typography, List, ListItem, ListItemText } from '@mui/material';
+import { Box, Typography, List, ListItem, ListItemText,Container } from '@mui/material';
 
 const HowToBuy = () => {
   return (
+    <Container sx={{ mt: 8 }}> {/* Agregar margen superior */}
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" component="h1" gutterBottom>
         Cómo Comprar
@@ -31,6 +32,7 @@ const HowToBuy = () => {
         Si tienes alguna pregunta o necesitas asistencia, no dudes en contactarnos. Estamos aquí para ayudarte en cada paso del camino.
       </Typography>
     </Box>
+  </Container>
   );
 };
 

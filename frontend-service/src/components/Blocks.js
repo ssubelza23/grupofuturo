@@ -1,9 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Polygon,Tooltip } from 'react-leaflet';
-
-import L from 'leaflet';
-
 const Blocks = ({ blocks, zoomLevel }) => {
   
   return (
