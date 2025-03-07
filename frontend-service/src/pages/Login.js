@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Container, Paper, Snackbar, Alert,Box } from '@mui/material';
+import { TextField, Button, Typography, Container, Paper, Snackbar, Alert, Box, Link } from '@mui/material';
 import { usersApi } from '../services/axiosConfig';
 
 const Login = () => {
@@ -57,67 +57,70 @@ const Login = () => {
 
   return (
     <Box
-    sx={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      height: '100vh',
-    }}
-  >
-    <Container component="main" maxWidth="xs">
-      <Paper elevation={3} style={{ padding: '20px' }}>
-        <Typography component="h1" variant="h5">
-          Iniciar Sesión
-        </Typography>
-        <form onSubmit={handleSubmit}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Correo Electrónico"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Contraseña"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-          >
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+      }}
+    >
+      <Container component="main" maxWidth="xs">
+        <Paper elevation={3} style={{ padding: '20px' }}>
+          <Typography component="h1" variant="h5">
             Iniciar Sesión
-          </Button>
-        </form>
-        <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError}>
-          <Alert onClose={handleCloseError} severity="error" sx={{ width: '100%' }}>
-            {error}
-          </Alert>
-        </Snackbar>
-        <Snackbar open={openSuccess} autoHideDuration={6000} onClose={handleCloseSuccess}>
-          <Alert onClose={handleCloseSuccess} severity="success" sx={{ width: '100%' }}>
-            Inicio de sesión exitoso
-          </Alert>
-        </Snackbar>
-      </Paper>
-    </Container>
+          </Typography>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Correo Electrónico"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Contraseña"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+            >
+              Iniciar Sesión
+            </Button>
+            <Link href="/forgot-password" variant="body2" style={{ display: 'block', marginTop: '10px' }}>
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </form>
+          <Snackbar open={openError} autoHideDuration={6000} onClose={handleCloseError}>
+            <Alert onClose={handleCloseError} severity="error" sx={{ width: '100%' }}>
+              {error}
+            </Alert>
+          </Snackbar>
+          <Snackbar open={openSuccess} autoHideDuration={6000} onClose={handleCloseSuccess}>
+            <Alert onClose={handleCloseSuccess} severity="success" sx={{ width: '100%' }}>
+              Inicio de sesión exitoso
+            </Alert>
+          </Snackbar>
+        </Paper>
+      </Container>
     </Box>
   );
 };

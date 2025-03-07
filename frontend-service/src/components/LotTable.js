@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, TablePagination, TextField } from '@mui/material';
-import { Edit, Delete, Visibility } from '@mui/icons-material';
+import { Edit } from '@mui/icons-material';
 import { lotsApi } from '../services/axiosConfig';
 
 

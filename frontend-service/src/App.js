@@ -9,6 +9,9 @@ import AboutUs from './pages/AboutUs';
 import HowToBuy from './pages/HowToBuy';
 import Proyects from './pages/Projects';
 import ProjectDetail from "./pages/ProjectDetail";
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword'; 
+
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
@@ -43,7 +46,6 @@ const App = () => {
   };
 
   return (
- 
     <Router>
       <Header isAuthenticated={isAuthenticated} user={user} onLogout={handleLogout} onLogin={handleLogin} />
       <Routes>
@@ -54,9 +56,10 @@ const App = () => {
         <Route path="/howtobuy" element={<HowToBuy />} />
         <Route path="/projects" element={<Proyects user={user}/>} />
         <Route path="/projects/:projectId" element={<ProjectDetail user={user}/>} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" component={ResetPassword} /> {/* Agrega la ruta */}
       </Routes>
     </Router>
-
   );
 };
 

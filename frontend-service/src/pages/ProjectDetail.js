@@ -133,7 +133,7 @@ const ProjectDetail = ({ user }) => {
           {project.name}
         </Typography>
       </Box>
-      <MapContainer center={center} zoom={16} style={{ height: '600px', width: '100%' }}>
+      <MapContainer center={center} zoom={16} style={{ height: '800px', width: '100%' }}>
         <MapEvents />
         <LayersControl position="topright">
           <LayersControl.BaseLayer checked name="OpenStreetMap">

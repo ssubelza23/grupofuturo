@@ -64,7 +64,7 @@ const loginUser = async (email, password) => {
     if (!isMatch) {
       throw new Error('Invalid email or password');
     }
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '144h' });
     return token;
   } catch (error) {
     throw new Error(error.message);
@@ -82,7 +82,44 @@ const getAuthenticatedUser = async (id) => {
     throw new Error(error.message);
   }
 };
+const forgotPassword = async (email) => {
+  try {
+    const user = await User.getByEmail(email);
+    if (!user) {
+      throw new Error('User not found');
+    }
 
+    // Generar un token JWT de recuperación
+    const resetToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    // Configurar el transporte de nodemailer
+    const transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    // Configurar el correo electrónico
+    const mailOptions = {
+      to: user.email,
+      from: process.env.EMAIL_USER,
+      subject: 'Password Reset',
+      text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
+             Please click on the following link, or paste this into your browser to complete the process:\n\n
+             http://${process.env.FRONTEND_URL}/reset-password/${resetToken}\n\n
+             If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+    };
+
+    // Enviar el correo electrónico
+    await transporter.sendMail(mailOptions);
+
+    return { message: 'Password reset email sent' };
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
 module.exports = {
   getAllUsers,
   getUserById,
@@ -90,5 +127,6 @@ module.exports = {
   updateUser,
   deleteUser,
   loginUser,
-  getAuthenticatedUser
+  getAuthenticatedUser,
+  forgotPassword
 };

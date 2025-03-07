@@ -1,6 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 const pool = require('../config/database'); // Asegúrate de que la ruta sea correcta
 require('dotenv').config();
 
@@ -149,4 +150,65 @@ router.get('/', authenticate, async (req, res) => {
   }
 });
 
+// Ruta para recuperación de contraseña
+router.post('/forgot-password', async (req, res) => {
+  const { email } = req.body;
+  try {
+    const userQuery = 'SELECT * FROM users WHERE email = $1';
+    const { rows } = await pool.query(userQuery, [email]);
+    const user = rows[0];
+    if (!user) {
+      return res.status(404).send({ error: 'User not found' });
+    }
+
+    // Generar un token JWT de recuperación
+    const resetToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    // Configurar el transporte de nodemailer
+    const transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    // Configurar el correo electrónico
+    const mailOptions = {
+      to: user.email,
+      from: process.env.EMAIL_USER,
+      subject: 'Password Reset',
+      text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
+             Please click on the following link, or paste this into your browser to complete the process:\n\n
+             ${process.env.FRONTEND_URL}/reset-password/${resetToken}\n\n
+             If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+    };
+
+    // Enviar el correo electrónico
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).send({ message: 'Password reset email sent' });
+  } catch (e) {
+    console.error(e); // Agrega esta línea para registrar el error
+    res.status(400).send({ error: e.message });
+  }
+});
+router.post('/reset-password', async (req, res) => {
+  const { token, password } = req.body;
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const hashedPassword = await bcrypt.hash(password, 8);
+    const query = 'UPDATE users SET password = $1 WHERE id = $2 RETURNING *';
+    const values = [hashedPassword, decoded.id];
+    const { rows } = await pool.query(query, values);
+    const user = rows[0];
+    if (!user) {
+      return res.status(404).send({ error: 'User not found' });
+    }
+    res.status(200).send({ message: 'Password reset successfully' });
+  } catch (e) {
+    console.error(e); // Agrega esta línea para registrar el error
+    res.status(400).send({ error: 'Invalid or expired token' });
+  }
+});
 module.exports = router;
